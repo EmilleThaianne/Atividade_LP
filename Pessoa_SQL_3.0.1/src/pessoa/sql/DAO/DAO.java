@@ -44,10 +44,10 @@ public class DAO {
         
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder
-                .append("UPDATE contatos SET ")
+                .append("UPDATE pessoa SET ")
                 .append("nome = ?,")
-                .append("idade = ? ")
-                .append("WHERE id = ?");
+                .append("data_nascimento = ? ")
+                .append("WHERE codigo = ?");
         
         String update = sqlBuilder.toString();
         int linha = 0;
@@ -56,7 +56,7 @@ public class DAO {
 
             sql = (PreparedStatement) conexao.prepareStatement(update);
             sql.setString(1, pessoa.getnome());
-            sql.setDate(2, (Date) pessoa.getData_nascimento());
+            sql.setDate(2, new Date(pessoa.getData_nascimento().getTime()));
             sql.setInt(3, pessoa.getcodigo());
             linha = sql.executeUpdate();
         } catch (Exception e) {
@@ -68,11 +68,11 @@ public class DAO {
         return linha;
     }
 
-    public int apagar(int id) {
+    public int apagar(int codigo) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder
-                .append("DELETE FROM contatos ")
-                .append("WHERE id = ?");
+                .append("DELETE FROM pessoa ")
+                .append("WHERE codigo = ?");
         
         String delete = sqlBuilder.toString();
         int linha = 0;
@@ -80,7 +80,7 @@ public class DAO {
             conexao = Conexao.getConexao();
 
             sql = (PreparedStatement) conexao.prepareStatement(delete);
-            sql.setInt(1, id);
+            sql.setInt(1, codigo);
             linha = sql.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

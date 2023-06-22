@@ -42,7 +42,7 @@ public class frm_pessoa extends javax.swing.JFrame {
         lbNome = new javax.swing.JLabel();
         lbDatanascimento = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
-        btnInserir = new javax.swing.JButton();
+        btnOkay = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         txtDatanascimento = new javax.swing.JFormattedTextField();
 
@@ -76,9 +76,19 @@ public class frm_pessoa extends javax.swing.JFrame {
             }
         });
 
-        btnInserir.setText("Inserir");
+        btnOkay.setText("Okay");
+        btnOkay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkayActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         txtDatanascimento.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -108,12 +118,11 @@ public class frm_pessoa extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbDatanascimento)
-                            .addComponent(btnInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnOkay, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, Short.MAX_VALUE)
-                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(txtDatanascimento)))))
@@ -132,7 +141,7 @@ public class frm_pessoa extends javax.swing.JFrame {
                     .addComponent(txtDatanascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(69, 69, 69)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInserir)
+                    .addComponent(btnOkay)
                     .addComponent(btnCancelar))
                 .addGap(58, 58, 58))
         );
@@ -168,10 +177,55 @@ public class frm_pessoa extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtDatanascimentoFocusLost
 
+    private void btnOkayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkayActionPerformed
+
+        if (pessoa == null) {
+            Pessoa pessoa = new Pessoa();
+            pessoa.setnome(txtNome.getText());
+            pessoa.setData_nascimento(Data_nascimento);
+
+            int linha = pessoaDAO.inserir(pessoa);
+            if (linha > 0) {
+                JOptionPane.showMessageDialog(this, "Pessoa inserida com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao inserir Pessoa!");
+            }
+
+        } else {
+            Pessoa pessoaEditado = new Pessoa();
+            pessoaEditado.setcodigo(this.pessoa.getcodigo());
+            
+            pessoaEditado.setnome(txtNome.getText());
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date data = formato.parse(txtDatanascimento.getText());
+                pessoaEditado.setData_nascimento(data);
+            } catch (ParseException ex) {
+                Logger.getLogger(frm_pessoa.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            int linha = pessoaDAO.editar(pessoaEditado);
+            if (linha > 0) {
+                JOptionPane.showMessageDialog(this, "Pessoa editada com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao editar Pessoa!");
+            }
+        }
+
+        this.dispose();
+    }//GEN-LAST:event_btnOkayActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+       Object[] opcao = {"Não", "Sim"};
+        int opcaoSelecionada = JOptionPane.showOptionDialog(this, "Deseja realmente sair?", "Aviso",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opcao, opcao[0]);
+        if (opcaoSelecionada == 1) {
+       this.dispose(); }    
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnInserir;
+    private javax.swing.JButton btnOkay;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbDatanascimento;

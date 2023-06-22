@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package aplicacao;
 
 import java.text.ParseException;
@@ -15,56 +11,58 @@ import pessoa.sql.DAO.DAO;
 import pessoa.sql.Pessoa;
 
 public class frm_principal extends javax.swing.JFrame {
-
+    
     private final DefaultTableModel modelo;
     private DAO pdao = new DAO();
-
+    
     public frm_principal() {
         initComponents();
+        //*tblPessoa.setEnabled(false);
         modelo = (DefaultTableModel) tblPessoa.getModel();
         modelo.addColumn("Código");
         modelo.addColumn("Nome");
         modelo.addColumn("Data de Nascimento");
+       
     }
-
+    
     private void preenherTabela() {
         modelo.getDataVector().clear();
         try {
             for (Pessoa pessoa : pdao.listar()) {
                 modelo.addRow(new Object[]{pessoa.getcodigo(), pessoa.getnome(), pessoa.getData_nascimento()});
-
+                
             }
         } catch (Exception e) {
             throw e;
         }
     }
-
+    
     private void incluir() throws ParseException {
-        new frm_pessoa(null ).setVisible(true);
+        new frm_pessoa(null).setVisible(true);
     }
-
+    
     private void editar() {
         try {
             Integer codigo = (Integer) modelo.getValueAt(tblPessoa.getSelectedRow(), 0);
             String nome = (String) modelo.getValueAt(tblPessoa.getSelectedRow(), 1);
             Date Data_nascimento = (Date) modelo.getValueAt(tblPessoa.getSelectedRow(), 2);
-
+            
             Pessoa pessoa = new Pessoa();
             pessoa.setcodigo(codigo);
             pessoa.setnome(nome);
             pessoa.setData_nascimento(Data_nascimento);
-
+            
             new frm_pessoa(pessoa).setVisible(true);
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Por favor, selecionar a linha da tabela que deseja editar.");
         }
     }
-
+    
     private void apagar() {
         try {
             Integer codigo = (Integer) modelo.getValueAt(tblPessoa.getSelectedRow(), 0);
-
+            
             int linha = pdao.apagar(codigo);
             if (linha > 0) {
                 modelo.removeRow(tblPessoa.getSelectedRow());
@@ -72,10 +70,10 @@ public class frm_principal extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao excluir.");
             }
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Por favor, selecionar uma linha da tabela");
-        } 
+        }        
     }
     
     @SuppressWarnings("unchecked")
@@ -153,6 +151,11 @@ public class frm_principal extends javax.swing.JFrame {
         });
 
         btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -218,9 +221,15 @@ public class frm_principal extends javax.swing.JFrame {
             apagar();
     }//GEN-LAST:event_btnApagarActionPerformed
     }
-    /**
-     * @param args the command line arguments
-     */
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        Object[] opcao = {"Não", "Sim"};
+        int opcaoSelecionada = JOptionPane.showOptionDialog(this, "Deseja realmente sair?", "Aviso",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opcao, opcao[0]);
+        if (opcaoSelecionada == 1) {
+            System.exit(0);
+        }        
+    }//GEN-LAST:event_btnSairActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
