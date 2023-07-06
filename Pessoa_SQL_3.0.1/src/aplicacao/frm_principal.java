@@ -1,12 +1,15 @@
-
 package aplicacao;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import pessoa.sql.DAO.DAO;
 import pessoa.sql.Pessoa;
@@ -35,7 +38,21 @@ public class frm_principal extends javax.swing.JFrame {
         modelo.addColumn("Nome");
         modelo.addColumn("Data de Nascimento");
 
-        
+        tblPessoa.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected,
+                        hasFocus, row, column);
+                if (row % 2 == 1) {
+                    setBackground(Color.GREEN);
+                } else {
+                    setBackground(Color.CYAN);
+                }
+                return this;
+            }
+        });
+
     }
 
     private void preenherTabela() {
