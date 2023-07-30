@@ -1,3 +1,3 @@
-# Atividades Práticas das materias técnicas.
+# Atividades Práticas de Lógica de Programação.
 
-Projetos com o intuito de por em prática o aprendizado da aula.
+Projetos com o intuito de aplicar o contéudo ensinado em aula.
